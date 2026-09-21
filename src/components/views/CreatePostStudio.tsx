@@ -27,7 +27,9 @@ import {
   Repeat,
   Play,
   Image as ImageIcon
+} from 'lucide-react';
 import { fetchApi } from '../../services/api';
+
 
 export const CreatePostStudio: React.FC = () => {
 

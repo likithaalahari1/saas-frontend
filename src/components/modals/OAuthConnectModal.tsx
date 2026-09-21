@@ -1,6 +1,11 @@
+import React, { useState } from 'react';
+import { useApp } from '../../context/AppContext';
+import { platformMeta } from '../common/BrandLogo';
+import { ShieldCheck, CheckCircle2, Lock, ArrowRight, X } from 'lucide-react';
 import { fetchApi } from '../../services/api';
 
 export const OAuthConnectModal: React.FC = () => {
+
   const { 
     isConnectModalOpen, 
     setIsConnectModalOpen, 
