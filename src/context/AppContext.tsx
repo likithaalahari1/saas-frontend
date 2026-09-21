@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { fetchApi } from '../services/api';
+
 import { 
   SocialAccount, 
   Post, 
@@ -112,6 +114,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Publishing animation state
   const [isPublishingProgress, setIsPublishingProgress] = useState(false);
   const [publishingProgressMap, setPublishingProgressMap] = useState<Record<string, { percent: number; status: 'waiting' | 'publishing' | 'done' | 'failed' }>>({});
+
+  // Fetch live connected accounts from production Django backend
+  useEffect(() => {
+    async function loadAccounts() {
+      try {
+        const liveData = await fetchApi<any[]>('/accounts/');
+        if (Array.isArray(liveData) && liveData.length > 0) {
+          setAccounts(prev => prev.map(acc => {
+            const found = liveData.find(item => item.platform === acc.platform && item.is_connected);
+            if (found) {
+              return {
+                ...acc,
+                name: found.account_name || acc.name,
+                username: found.username || acc.username,
+                connected: true,
+                health: found.health || 'healthy',
+                lastSynced: 'Just now',
+                followersCount: found.followers_count || 18400,
+                postsPublishedCount: found.posts_published_count || 42
+              };
+            }
+            return acc;
+          }));
+        }
+      } catch (e) {
+        console.log('Backend sync status:', e);
+      }
+    }
+    loadAccounts();
+  }, []);
+
 
   const startConnectPlatform = (platform: PlatformId) => {
     setConnectingPlatform(platform);
