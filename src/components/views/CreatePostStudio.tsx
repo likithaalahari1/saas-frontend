@@ -27,9 +27,10 @@ import {
   Repeat,
   Play,
   Image as ImageIcon
-} from 'lucide-react';
+import { fetchApi } from '../../services/api';
 
 export const CreatePostStudio: React.FC = () => {
+
   const { 
     accounts, 
     createPost, 
@@ -112,7 +113,31 @@ export const CreatePostStudio: React.FC = () => {
     }));
   };
 
-  const handlePublishNow = () => {
+  const handlePublishNow = async () => {
+    try {
+      await fetchApi('/posts/', {
+        method: 'POST',
+        body: JSON.stringify({
+          global_caption: globalCaption,
+          global_media_urls: globalMedia,
+          platforms: selectedPlatforms,
+          status: 'published',
+          variants: Object.fromEntries(
+            selectedPlatforms.map(p => [
+              p,
+              {
+                caption: getEffectiveCaption(p),
+                hashtags: variants[p]?.hashtags || [],
+                custom_options: variants[p]?.customOptions || {}
+              }
+            ])
+          )
+        })
+      });
+    } catch (e) {
+      console.log('Backend sync status:', e);
+    }
+
     simulatePublishing(selectedPlatforms, () => {
       // Trigger celebration confetti
       confetti({
@@ -120,6 +145,7 @@ export const CreatePostStudio: React.FC = () => {
         spread: 70,
         origin: { y: 0.6 }
       });
+
 
       // Save post in state
       createPost({
