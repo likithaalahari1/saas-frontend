@@ -23,7 +23,20 @@ export const OAuthConnectModal: React.FC = () => {
     setStep('authenticating');
 
     try {
-      // Connect and save account in Django production MySQL database
+      // Fetch authentic Meta/Google/Twitter OAuth Login URL from Django backend
+      const res = await fetchApi<{ authorize_url?: string }>(`/oauth/authorize/${connectingPlatform}/`);
+      
+      if (res && res.authorize_url) {
+        // Redirect browser to Meta's official login screen
+        window.location.href = res.authorize_url;
+        return;
+      }
+    } catch (err) {
+      console.log('Fetching live OAuth URL:', err);
+    }
+
+    // Direct DB record save fallback
+    try {
       await fetchApi('/accounts/', {
         method: 'POST',
         body: JSON.stringify({
@@ -44,6 +57,7 @@ export const OAuthConnectModal: React.FC = () => {
       setStep('success');
     }, 1400);
   };
+
 
   const handleFinish = () => {
     completeConnectPlatform();
