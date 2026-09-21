@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: #E85AAD;
+    --primary-dark: #C93D91;
+    --soft-pink: #FCE7F3;
+    --pink-bg: #FFF7FB;
+    --accent: #8B5CF6;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --main-text: #18181B;
+    --sec-text: #71717A;
+    --border: #F1E7EE;
+    --main-bg: #FFFDFE;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--main-bg);
+    color: var(--main-text);
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF7FB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E2D5DF;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C93D91;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(241, 231, 238, 0.8);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 247, 251, 0.6) 100%);
+  backdrop-filter: blur(8px);
+  border: 1px solid #F1E7EE;
+}
+
+.gradient-btn {
+  background: linear-gradient(135deg, #E85AAD 0%, #8B5CF6 100%);
+  transition: all 0.25s ease;
+}
+
+.gradient-btn:hover {
+  background: linear-gradient(135deg, #C93D91 0%, #7C3AED 100%);
+  box-shadow: 0 8px 24px rgba(232, 90, 173, 0.25);
+  transform: translateY(-1px);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #E85AAD 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
